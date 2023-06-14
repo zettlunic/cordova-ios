@@ -45,6 +45,12 @@
     return self;
 }
 
+- (NSString*)pathForGeorgeResource:(NSString*)resourcepath
+{
+    NSBundle* businessBundle = [NSBundle bundleWithIdentifier:@"com.george-labs.module.BusinessWebView"];
+    return [businessBundle pathForResource:_viewController.startPage ofType:@"" inDirectory:_viewController.wwwFolderName];
+}
+
 - (NSString*)pathForResource:(NSString*)resourcepath
 {
     NSBundle* mainBundle = [NSBundle mainBundle];

@@ -32,6 +32,7 @@ typedef NSURL* (^ UrlTransformerBlock)(NSURL*);
 @property (nonatomic, copy) UrlTransformerBlock urlTransformer;
 
 - (NSString*)pathForResource:(NSString*)resourcepath;
+- (NSString*)pathForGeorgeResource:(NSString*)resourcepath;
 - (id)getCommandInstance:(NSString*)pluginName;
 
 // Sends a plugin result to the JS. This is thread-safe.

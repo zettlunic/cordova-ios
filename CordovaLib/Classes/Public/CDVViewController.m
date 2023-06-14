@@ -206,49 +206,50 @@
 {
     NSURL* appURL = nil;
 
-    if ([self.startPage rangeOfString:@"://"].location != NSNotFound) {
-        appURL = [NSURL URLWithString:self.startPage];
-    } else if ([self.wwwFolderName rangeOfString:@"://"].location != NSNotFound) {
-        appURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.wwwFolderName, self.startPage]];
-    } else if([self.wwwFolderName rangeOfString:@".bundle"].location != NSNotFound){
-        // www folder is actually a bundle
-        NSBundle* bundle = [NSBundle bundleWithPath:self.wwwFolderName];
+    NSBundle* bundle = [NSBundle bundleWithIdentifier:@"com.george-labs.module.BusinessWebView"];
 
-        NSString* startPageNoParentDirs = self.startPage;
-        NSRange r = [startPageNoParentDirs rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"] options:0];
-        if (r.location != NSNotFound) {
-            NSString* queryAndOrFragment = [self.startPage substringFromIndex:r.location];
-            NSString* baseURL = [self.startPage substringToIndex:r.location];
+    NSString* startPageNoParentDirs = self.startPage;
+    NSRange r = [startPageNoParentDirs rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"] options:0];
+    if (r.location != NSNotFound) {
+        NSString* queryAndOrFragment = [self.startPage substringFromIndex:r.location];
+        NSString* baseURL = [self.startPage substringToIndex:r.location];
 
-            appURL = [bundle URLForResource:baseURL withExtension:nil];
-            appURL = [NSURL URLWithString:queryAndOrFragment relativeToURL:appURL];
-        } else {
-            appURL = [bundle URLForResource:self.startPage withExtension:nil];
-        }
-    } else if([self.wwwFolderName rangeOfString:@".framework"].location != NSNotFound){
-        // www folder is actually a framework
-        NSBundle* bundle = [NSBundle bundleWithPath:self.wwwFolderName];
-        appURL = [bundle URLForResource:self.startPage withExtension:nil];
+        appURL = [bundle URLForResource:baseURL withExtension:nil];
+        appURL = [NSURL URLWithString:queryAndOrFragment relativeToURL:appURL];
     } else {
-        // CB-3005 strip parameters from start page to check if page exists in resources
-        NSURL* startURL = [NSURL URLWithString:self.startPage];
-        NSString* startFilePath = [self.commandDelegate pathForResource:[startURL path]];
-
-        if (startFilePath == nil) {
-            appURL = nil;
-        } else {
-            appURL = [NSURL fileURLWithPath:startFilePath];
-            // CB-3005 Add on the query params or fragment.
-            NSString* startPageNoParentDirs = self.startPage;
-            NSRange r = [startPageNoParentDirs rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"] options:0];
-            if (r.location != NSNotFound) {
-                NSString* queryAndOrFragment = [self.startPage substringFromIndex:r.location];
-                appURL = [NSURL URLWithString:queryAndOrFragment relativeToURL:appURL];
-            }
-        }
+        appURL = [bundle URLForResource:self.startPage withExtension:nil];
     }
 
     return appURL;
+
+//    if ([self.startPage rangeOfString:@"://"].location != NSNotFound) {
+//        appURL = [NSURL URLWithString:self.startPage];
+//    } else if ([self.wwwFolderName rangeOfString:@"://"].location != NSNotFound) {
+//        appURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.wwwFolderName, self.startPage]];
+//    } else if([self.wwwFolderName rangeOfString:@".bundle"].location != NSNotFound){
+//        // www folder is actually a bundle
+//        NSBundle* bundle = [NSBundle bundleWithPath:self.wwwFolderName];
+//
+//        NSString* startPageNoParentDirs = self.startPage;
+//        NSRange r = [startPageNoParentDirs rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"] options:0];
+//        if (r.location != NSNotFound) {
+//            NSString* queryAndOrFragment = [self.startPage substringFromIndex:r.location];
+//            NSString* baseURL = [self.startPage substringToIndex:r.location];
+//
+//            appURL = [bundle URLForResource:baseURL withExtension:nil];
+//            appURL = [NSURL URLWithString:queryAndOrFragment relativeToURL:appURL];
+//        } else {
+//            appURL = [bundle URLForResource:self.startPage withExtension:nil];
+//        }
+//    } else if([self.wwwFolderName rangeOfString:@".framework"].location != NSNotFound){
+//        // www folder is actually a framework
+//        NSBundle* bundle = [NSBundle bundleWithPath:self.wwwFolderName];
+//        appURL = [bundle URLForResource:self.startPage withExtension:nil];
+//    } else {
+//
+//    }
+//
+//    return appURL;
 }
 
 - (nullable NSURL*)errorURL

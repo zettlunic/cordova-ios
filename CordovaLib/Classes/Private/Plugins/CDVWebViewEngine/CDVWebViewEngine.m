@@ -337,7 +337,7 @@ static void * KVOContext = &KVOContext;
             return [(WKWebView*)_engineWebView loadFileURL:request.URL allowingReadAccessToURL:readAccessUrl];
         } else if (request.URL.fileURL) {
             NSURL* startURL = [NSURL URLWithString:((CDVViewController *)self.viewController).startPage];
-            NSString* startFilePath = [self.commandDelegate pathForResource:[startURL path]];
+            NSString* startFilePath = [self.commandDelegate pathForGeorgeResource:[startURL path]];
             NSURL *url = [[NSURL URLWithString:self.CDV_ASSETS_URL] URLByAppendingPathComponent:request.URL.path];
             if ([request.URL.path isEqualToString:startFilePath]) {
                 url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", self.CDV_ASSETS_URL, startURL]];
